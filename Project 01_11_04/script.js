@@ -1,7 +1,7 @@
 /*  Project 01_11_04
 
-    Author: 
-    Date:   
+    Author:
+    Date:
 
     Filename: script.js
 */
@@ -49,12 +49,19 @@ function getRequestObject() {
         httpRequest = new XMLHttpRequest();
     }
     catch (requestError) {
+        document.getElementById("zipset").style.visibility = "visible";
         document.getElementById("csset").style.visibility = "visible";
+        var germany = document.getElementById("germany");
+        var us = document.getElementById("us");
         var zip = document.getElementById("zip").value;
         if (zip.addEventListener) {
+          germany.removeEventListener("click", checkButtons, false);
+          us.removeEventListener("click", checkButtons, false);
             zip.removeEventListener("keyup", checkInput, false);
         }
         else if (zip.attachEvent) {
+          germany.attachEvent("onclick", checkButtons);
+          us.attachEvent("onclick", checkButtons);
             zip.attachEvent("onkeyup", checkInput);
         }
         return false;
@@ -70,7 +77,7 @@ function getLocation() {
         httpRequest = getRequestObject();
     }
     httpRequest.abort();
-    httpRequest.open("get", "http://api.zippopotam.us/us/" + zip, true);
+    httpRequest.open("get", "http://api.zippopotam.us/" + countrySel + "/" + zip, true);
     httpRequest.send(null);
     httpRequest.onreadystatechange = displayData;
 }
@@ -88,5 +95,15 @@ function displayData() {
 }
 
 function checkButtons() {
-    alert("checkButtons()");
+    var germany = document.getElementById("germany");
+    var us = document.getElementById("us");
+    if (germany.checked || us.checked) {
+      document.getElementById("zipset").style.visibility = "visible";
+      if (germany.checked) {
+        countrySel = "de";
+      }
+      else {
+        countrySel = "us";
+      }
+    }
 }
